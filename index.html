@@ -16,7 +16,7 @@
             --accent: #deff9a;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;600;800&family=Montserrat:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Changa:wght=400;600;800&family=Montserrat:wght=700;900&display=swap');
 
         * {
             margin: 0;
@@ -215,7 +215,7 @@
         .product-name { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
         .product-price { font-family: 'Montserrat'; font-size: 1.2rem; color: var(--accent); font-weight: bold; margin-bottom: 15px;}
 
-        /* أزرار تبديل الألوان في المنتج */
+        /* أزرار تبديل الألوان في المنتج الرئيسي */
         .visual-colors {
             display: flex;
             justify-content: center;
@@ -234,6 +234,8 @@
         .color-btn:hover { transform: scale(1.1); }
         .color-btn.black { background-color: #000; border-color: #444; }
         .color-btn.white { background-color: #fff; border-color: #ccc; }
+        /* تم التعديل هنا ليكون الزر أسود بالكامل */
+        .color-btn.grey { background-color: #000000; border-color: #444; }
 
         .buy-now-btn {
             background: rgba(255, 255, 255, 0.04);
@@ -345,10 +347,10 @@
         .modal-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; text-align: center; margin-top: 10px; }
         .target-product { color: var(--accent); margin-bottom: 25px; font-size: 1.1rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; text-align: center; font-weight: bold;}
 
-        /* ألبوم صور المنتج داخل صفحة الدفع - تم تعديل مقاس الصور لتبدو أصغر ومتناسقة تماماً */
+        /* ألبوم صور المنتج داخل صفحة الـ Modal */
         .modal-gallery {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             overflow-x: auto;
             padding: 10px 5px;
             margin-bottom: 30px;
@@ -357,20 +359,64 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .modal-gallery img {
-            width: 160px;       /* تم تصغير العرض لتصبح الصور أنيقة */
-            height: 220px;      /* تم تصغير الارتفاع لتناسب الشاشات ولا تأخذ مساحة كبيرة */
-            object-fit: cover;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
+        /* كارت يجمع الصورة والزر الدائري تحتها */
+        .modal-gallery-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
             scroll-snap-align: start;
             flex-shrink: 0;
-            transition: 0.3s;
         }
-        .modal-gallery img:hover { transform: scale(1.04); border-color: rgba(255,255,255,0.3); }
 
-        @media (min-width: 768px) {
-            .modal-gallery { justify-content: center; }
+        .modal-gallery-item img {
+            width: 150px;       
+            height: 200px;      
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        /* حاوية زر الدائرة الملونة داخل المودال */
+        .modal-color-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        /* زر الدائرة الملونة الفعلي */
+        .modal-color-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.4);
+        }
+
+        /* تخصيص ألوان الأزرار الدائرية بالمودال */
+        .modal-color-btn.black-btn { background-color: #000000; }
+        .modal-color-btn.white-btn, .modal-color-btn.full-white-btn { background-color: #ffffff; }
+        
+        /* تم التعديل هنا ليكون الزر أسود بالكامل بدلا من أبيض وأسود منقط */
+        .modal-color-btn.grey-btn { 
+            background-color: #000000;
+        }
+
+        /* تأثير الإضاءة والإطار عند اختيار الزر أو الصورة */
+        .modal-gallery-item.active-item img {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(222, 255, 154, 0.25);
+        }
+
+        .modal-gallery-item.active-item .modal-color-wrapper {
+            border-color: var(--accent);
         }
 
         .form-group { margin-bottom: 18px; text-align: right; }
@@ -474,7 +520,6 @@
 
             <div class="products-grid" id="grid">
                 
-                <!-- المنتج الأول: خاص بالشورت فقط وفيه صور الشورت كاملة بما فيها الصورة الرمادية -->
                 <div class="product-card">
                     <img src="https://i.postimg.cc/nrt73KJZ/650277558-1297397422287110-700805380234868035-n.jpg" alt="Ensemble Baggy Short" class="product-img" id="img-short">
                     <div class="product-info">
@@ -484,17 +529,17 @@
                         <div class="visual-colors">
                             <div class="color-btn black" onclick="switchImage('img-short', 'https://i.postimg.cc/nrt73KJZ/650277558-1297397422287110-700805380234868035-n.jpg')" title="شاهد اللون الأسود"></div>
                             <div class="color-btn white" onclick="switchImage('img-short', 'https://i.postimg.cc/VvcMK98P/679499011-941405405332447-7211452758472670946-n.jpg')" title="شاهد اللون الأبيض"></div>
+                            <div class="color-btn grey" onclick="switchImage('img-short', 'https://i.postimg.cc/PpQGTtPV/707406142-1350270013833123-5686793816826678228-n.jpg')" title="شاهد اللون الرمادي (أسود كامل)"></div>
                         </div>
                     </div>
                     <button class="buy-now-btn" onclick="openCheckout('Ensemble Baggy Short + T-shirt Cropped', 4200, [
-                        'https://i.postimg.cc/nrt73KJZ/650277558-1297397422287110-700805380234868035-n.jpg', 
-                        'https://i.postimg.cc/VvcMK98P/679499011-941405405332447-7211452758472670946-n.jpg',
-                        'https://i.postimg.cc/PpQGTtPV/707406142-1350270013833123-5686793816826678228-n.jpg',
-                        'https://i.postimg.cc/2b7przVK/703413425-27420311414220635-4217515209817906735-n.jpg'
+                        { src: 'https://i.postimg.cc/nrt73KJZ/650277558-1297397422287110-700805380234868035-n.jpg', color: 'أسود', type: 'black-btn' }, 
+                        { src: 'https://i.postimg.cc/VvcMK98P/679499011-941405405332447-7211452758472670946-n.jpg', color: 'أبيض', type: 'white-btn' },
+                        { src: 'https://i.postimg.cc/PpQGTtPV/707406142-1350270013833123-5686793816826678228-n.jpg', color: 'رمادي', type: 'grey-btn' },
+                        { src: 'https://i.postimg.cc/2b7przVK/703413425-27420311414220635-4217515209817906735-n.jpg', color: 'أبيض بالكامل', type: 'full-white-btn' }
                     ])">شراء الآن</button>
                 </div>
 
-                <!-- المنتج الثاني: خاص بالباغي الطويل والتريكو -->
                 <div class="product-card">
                     <img src="https://i.postimg.cc/MKpXq3tr/646362597-2367627233720047-1910908815861820018-n.jpg" alt="Ensemble Baggy Jogger" class="product-img" id="img-jogger">
                     <div class="product-info">
@@ -504,12 +549,13 @@
                         <div class="visual-colors">
                             <div class="color-btn black" onclick="switchImage('img-jogger', 'https://i.postimg.cc/MKpXq3tr/646362597-2367627233720047-1910908815861820018-n.jpg')" title="شاهد اللون الأسود"></div>
                             <div class="color-btn white" onclick="switchImage('img-jogger', 'https://i.postimg.cc/02yrPXZZ/701280862-1268711011911025-3293799098320182815-n.jpg')" title="شاهد اللون الأبيض"></div>
+                            <div class="color-btn grey" onclick="switchImage('img-jogger', 'https://i.postimg.cc/KkDXxZRs/683175306-1511967893625443-7122705551689119900-n.jpg')" title="شاهد اللون الرمادي (أسود كامل)"></div>
                         </div>
                     </div>
                     <button class="buy-now-btn" onclick="openCheckout('Ensemble Baggy joggr + T-shirt Cropped', 4200, [
-                        'https://i.postimg.cc/MKpXq3tr/646362597-2367627233720047-1910908815861820018-n.jpg', 
-                        'https://i.postimg.cc/02yrPXZZ/701280862-1268711011911025-3293799098320182815-n.jpg',
-                        'https://i.postimg.cc/KkDXxZRs/683175306-1511967893625443-7122705551689119900-n.jpg'
+                        { src: 'https://i.postimg.cc/MKpXq3tr/646362597-2367627233720047-1910908815861820018-n.jpg', color: 'أسود', type: 'black-btn' }, 
+                        { src: 'https://i.postimg.cc/02yrPXZZ/701280862-1268711011911025-3293799098320182815-n.jpg', color: 'أبيض', type: 'white-btn' },
+                        { src: 'https://i.postimg.cc/KkDXxZRs/683175306-1511967893625443-7122705551689119900-n.jpg', color: 'رمادي', type: 'grey-btn' }
                     ])">شراء الآن</button>
                 </div>
 
@@ -543,7 +589,6 @@
 
     </div>
 
-    <!-- صفحة تعبئة البيانات الكاملة والمطورة -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="checkout-modal">
             <button class="close-modal" onclick="closeCheckout()">✕</button>
@@ -566,12 +611,12 @@
                 <div class="row-options">
                     <div class="form-group">
                         <label>اللون المطلوب</label>
-                        <select id="custColor" class="form-control" required>
+                        <select id="custColor" class="form-control" required onchange="syncGallerySelection(this.value)">
                             <option value="" disabled selected>اختر اللون</option>
                             <option value="أسود">أسود</option>
                             <option value="أبيض">أبيض</option>
                             <option value="رمادي">رمادي</option>
-                            <option value="حسب الصورة المعروضة">حسب صور العرض المرفقة</option>
+                            <option value="أبيض بالكامل">أبيض بالكامل</option>
                         </select>
                     </div>
                     
@@ -665,17 +710,52 @@
             
             const galleryContainer = document.getElementById('modalProductGallery');
             galleryContainer.innerHTML = ""; 
-            imagesArray.forEach(src => {
+            
+            imagesArray.forEach(item => {
+                const itemWrapper = document.createElement('div');
+                itemWrapper.className = "modal-gallery-item";
+                itemWrapper.dataset.color = item.color;
+
                 const img = document.createElement('img');
-                img.src = src;
-                img.alt = name;
-                galleryContainer.appendChild(img);
+                img.src = item.src;
+                img.alt = item.color;
+
+                const colorWrapper = document.createElement('div');
+                colorWrapper.className = "modal-color-wrapper";
+
+                const colorCircle = document.createElement('div');
+                colorCircle.className = `modal-color-btn ${item.type}`;
+
+                colorWrapper.appendChild(colorCircle);
+
+                itemWrapper.onclick = function() {
+                    document.querySelectorAll('.modal-gallery-item').forEach(el => el.classList.remove('active-item'));
+                    itemWrapper.classList.add('active-item');
+                    
+                    const colorSelect = document.getElementById('custColor');
+                    colorSelect.value = item.color;
+                };
+
+                itemWrapper.appendChild(img);
+                itemWrapper.appendChild(colorWrapper);
+                galleryContainer.appendChild(itemWrapper);
             });
 
             document.getElementById('checkoutModal').style.display = 'block';
             document.getElementById('checkoutModal').classList.add('open');
             document.body.style.overflow = 'hidden'; 
             setShipping('home', 800); 
+        }
+
+        function syncGallerySelection(selectedColor) {
+            document.querySelectorAll('.modal-gallery-item').forEach(item => {
+                if(item.dataset.color === selectedColor) {
+                    item.classList.add('active-item');
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } else {
+                    item.classList.remove('active-item');
+                }
+            });
         }
 
         function closeCheckout() {
